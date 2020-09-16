@@ -1,14 +1,11 @@
 <?php
 
-use Psr\Container\ContainerInterface;
+
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Psr\Container\ContainerInterface;
 use Slim\Middleware\ErrorMiddleware;
-use App\Middleware\SessionMiddleware;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use Slim\Middleware\SessionMiddleware;
 
 return [
     'settings' => function () {
@@ -35,18 +32,9 @@ return [
         return new PDO($dsn, $username, $password, $flags);
     },
 
-    Session::class => function (ContainerInterface $container) {
-        $settings = $container->get('settings')['session'];
-        if (PHP_SAPI === 'cli') {
-            return new Session(new MockArraySessionStorage());
-        } else {
-            return new Session(new NativeSessionStorage($settings));
-        }
-    },
-
-    SessionInterface::class => function (ContainerInterface $container) {
-        return $container->get(Session::class);
-    },
+/*    ConvertCurrencyAction::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings')['fixer_apikey'];
+    },*/
 
     ErrorMiddleware::class => function (ContainerInterface $container) {
         $app = $container->get(App::class);
