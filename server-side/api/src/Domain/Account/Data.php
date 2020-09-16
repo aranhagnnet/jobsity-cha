@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\User\Data;
+namespace App\Domain\Account\Data;
 
-final class UserData
+final class AccountData
 {
     /**
      * @var int
@@ -12,17 +12,23 @@ final class UserData
     /** @var string */
     public $username;
 
-    /** @var string */
-    public $firstName;
+    /** @var float */
+    public $previous_balance;
 
     /** @var string */
-    public $lastName;
+    public $operation_code;
+
+    /** @var float */
+    public $operation_value;
 
     /** @var string */
-    public $email;
+    public $currency_code;
+
+    /** @var float */
+    public $current_balance;
 
     /** @var string */
-    public $default_currency;
+    public $date_time;
 }
 
 
