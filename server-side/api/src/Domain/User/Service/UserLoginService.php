@@ -4,9 +4,6 @@ namespace App\Domain\User\Service;
 
 use App\Domain\User\Repository\UserLoginRepository;
 use App\Exception\ValidationException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Cookie;
-use Slim\Http\Cookies;
 
 /**
  * Service.
@@ -33,27 +30,23 @@ final class UserLoginService
      *
      * @param array $data The form data
      *
-     * @return bool
+     * @return string session_id
      */
-    public function loginUser(array $data): bool
+    public function loginUser(array $data): string
     {
         // Password validation
         if($this->passwordMatch($data))
         {
-            $username=$data['login'];
-
-            if(setcookie("jobsity_challenge", $username, time()+3600, "/", null, false))
-            {
-                return TRUE; 
-            }
-            else 
-            {
-                return FALSE;
-            }
+            session_start();
+            $session_id = session_id(); 
+            
+            $this->repository->setSessionId($data, $session_id);
+            
+            return ($session_id);
         }
         else 
         {
-            return FALSE;
+            return 0;
         }
     }
 

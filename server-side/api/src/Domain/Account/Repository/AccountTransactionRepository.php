@@ -26,6 +26,40 @@ class AccountTransactionRepository
 
 
     /**
+     * Loads if user login is still valid
+     *
+     * @param array $data The username and login session id
+     *
+     * @return bool 
+     */
+     public function isLoginValid(array $data): bool
+     {
+        $username = $data['username'];
+        $session_id = $data['sess'];
+        $now = time();
+
+        if($session_id!=NULL)
+        {
+            $sql = "select session_id, session_id_expires from users where username='$username'";
+            $sql_value = $this->connection->query($sql)->fetch();
+            if(($session_id==$sql_value['session_id']) and ($sql_value['session_id_expires']>$now))
+            {
+                return TRUE;
+            }
+            else
+            {
+                return FALSE;
+            }
+        }
+        else 
+        {
+            return FALSE; 
+        }
+     }
+ 
+ 
+
+    /**
      * Loads user account's balance from the database
      *
      * @param array $data The username 

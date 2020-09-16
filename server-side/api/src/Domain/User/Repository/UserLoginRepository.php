@@ -53,4 +53,24 @@ class UserLoginRepository
         }
      }
  
+
+     
+    /**
+     * Sets session_id for user
+     *
+     * @param array $data The username 
+     *
+     * @return void
+     */
+     public function setSessionId(array $data, $session_id): void
+     {
+        $username = $data['login'];
+
+        $expires = time()+3600;
+
+        $sql = "update users set session_id=?, session_id_expires=? where username=? ";
+
+        $stmt=$this->connection->prepare($sql);
+        $stmt->execute([$session_id, $expires, $username]);
+     }
 }

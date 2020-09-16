@@ -4,7 +4,7 @@ namespace App\Domain\Account\Service;
 
 use App\Domain\Account\Repository\AccountTransactionRepository;
 use App\Exception\ValidationException;
-use Symfony\Component\HttpFoundation\Session\Session;
+
 
 /**
  * Service.
@@ -16,7 +16,7 @@ final class AccountTransactionService
      */
     private $repository;
 
-    /**
+     /**
      * The constructor.
      *
      * @param AccountTransactionRepository $repository The repository
@@ -38,13 +38,21 @@ final class AccountTransactionService
         // Input validation
         $this->validateAccount($data);
 
-        // get Balance
-        $balance = $this->repository->getBalance($data);
+        if($this->repository->isLoginValid($data))
+        {
+            // get Balance
+            $balance = $this->repository->getBalance($data);
 
-        // Add the username
-        $balance['username']=$data['username'];
+            // Add the username
+            $balance['username']=$data['username'];
 
-        return $balance;
+            return $balance;
+        }
+        else
+        {
+            $balance=[];
+            return $balance;
+        }
     }
 
 
@@ -54,15 +62,22 @@ final class AccountTransactionService
      *
      * @param array $data user data
      *
-     * @return array 
+     * @return array bidimensional array with transactions
      */
      public function showTransactions(array $data): array
      {
         // Input validation
         $this->validateAccount($data);
 
-        // get Transactions
-        return $this->repository->getTransactions($data);
+        if($this->repository->isLoginValid($data))
+        {
+            // get Transactions
+            return $this->repository->getTransactions($data);
+        }
+        else 
+        {
+            return NULL; 
+        }
      }
 
 
@@ -77,9 +92,12 @@ final class AccountTransactionService
      */
      public function makeDeposit(array $data): array
      {
-         // Input validation
-         //$this->validateAccount($data);
-
+         // Login validation
+         if(!$this->repository->isLoginValid($data))
+         {
+            return NULL;
+         }
+ 
          $errors = [];
 
          // Get current balance and account's currency code
@@ -99,8 +117,6 @@ final class AccountTransactionService
             // New value, in the account's default currency
             $data['deposit_value'] = $new_value;
             $data['currency_code'] = $balance_account['currency_code'];
-
-            // deveria logar aqui a conversao de deposito?
          }
 
          // save the current balance into $data
@@ -128,6 +144,12 @@ final class AccountTransactionService
      */
      public function makeWithdraw(array $data): array
      {
+         // Login validation
+         if(!$this->repository->isLoginValid($data))
+         {
+            return NULL;
+         }
+
          $errors = [];         
 
          // Get current balance and account's currency code
@@ -249,9 +271,14 @@ final class AccountTransactionService
      */
      public function convertCurrencyFixer(array $data): float
      {
-        //$container = $app->getContainer();
-        //$settings = $container->get('settings');
-        //$api_key = $this->get('settings')['amdoren_apikey'];
+        // Login validation
+        if(!$this->repository->isLoginValid($data))
+        {
+           return NULL;
+        }
+
+        /*$api_key = $this->get('settings')['fixer_apikey'];
+        print_r($api_key); exit();*/
 
         $api_key = "8116664379236ef575cba840ccabbaf8";
 
