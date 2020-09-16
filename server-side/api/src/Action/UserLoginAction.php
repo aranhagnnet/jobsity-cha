@@ -6,7 +6,6 @@ use App\Domain\User\Service\UserLoginService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-
 final class UserLoginAction
 {
     private $userLogin;
@@ -25,10 +24,10 @@ final class UserLoginAction
         $data = (array)$request->getParsedBody();
 
         // Invoke the Domain with inputs and retain the result
-        $cookie_ok = $this->userLogin->loginUser($data);
+        $session_id = $this->userLogin->loginUser($data);
 
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($cookie_ok));
+        $response->getBody()->write((string)json_encode($session_id));
 
         return $response
             ->withHeader('Content-Type', 'application/json')

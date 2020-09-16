@@ -19,11 +19,6 @@ final class ShowBalanceAction
         ServerRequestInterface $request, 
         ResponseInterface $response, array $data
     ): ResponseInterface {
-        //$method = $request->getMethod();
-        //print_r($method); exit();
-        
-        // Collect input from the HTTP request
-        //POST: //$data = (array)$request->getParsedBody();
 
         // Invoke the Domain with inputs and retain the result
         $balance = $this->showBalance->showBalance($data);

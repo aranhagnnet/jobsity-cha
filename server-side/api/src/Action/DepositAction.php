@@ -5,7 +5,6 @@ namespace App\Action;
 use App\Domain\Account\Service\AccountTransactionService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Http\Cookies;
 
 final class DepositAction
 {
