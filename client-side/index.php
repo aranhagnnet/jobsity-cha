@@ -35,7 +35,7 @@ if($submit==NULL)
 
 <?php
 
-if(($submit==NULL) or ($submit=="Cancel") or ($submit=="Logout"))// home, login & create user options
+if(($submit==NULL) or ($submit=="Cancel"))// home, login & create user options
 {
 ?>
     <table width=80% align=center valign=middle> 
@@ -130,8 +130,30 @@ else if($submit=="Login")
         header("Location: $self?msg=error_login");
         exit();
     }
-
 }
+else if ($submit=="Logout")
+{
+    $username = $_SESSION['username'];
+
+    if($username!=NULL)
+    {
+        $url="$url/logout/$username";
+
+        // Create a new cURL resource
+        $ch = curl_init($url);
+    
+        // Return response instead of outputting
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+        // Execute the POST request
+        $result = json_decode(curl_exec($ch)); 
+    
+        header("Location: $self?");
+    }
+}
+
+
+
 else if($submit=="create_new_user")
 {
 ?>
