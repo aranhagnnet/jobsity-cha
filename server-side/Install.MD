@@ -89,8 +89,8 @@ Point server-side/public as the root of your webserver folder (see step above ag
 The folder structure should look like this (https://odan.github.io/2019/11/05/slim4-tutorial.html#directory-structure)
 
 ````
-/var/www/html
-.
+/var/www/html/ 
+
 ├── config/             Configuration files
 ├── public/             Web server files (DocumentRoot)
 │   └── .htaccess       Apache redirect rules for the front controller
@@ -126,7 +126,12 @@ $settings['amdoren_apikey'] = "cA6FwWkrAzb2D8HtRwMyjDXyae";
 // Powered by Fixer.io
 $settings['fixer_apikey'] = "81166643793e55ba840ccabbaf8";  
 ````
+
 Amdoren only allowed me to use its API 10 times and then it locked me out  :(
+
 I used fixer IO. It allows me 1000 requests per month on the free account
 
+--
+
+That's it 
 
