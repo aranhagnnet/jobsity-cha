@@ -9,15 +9,15 @@ $url = 'http://172.16.1.20';
 No need to change anything below this line
 
 ************************************************************************************************************************************/ 
-
+ob_start();
 session_start();
 
 error_reporting(E_ALL & ~E_NOTICE);
 
 $self = $_SERVER['PHP_SELF'];
 $submit = $_POST['submit'];
-$chatbot_enabled = $_POST['chatbot'];
 $command = $_POST['command'];
+$sess = $_POST['sess'];
 
 if($submit==NULL)
 {
@@ -98,12 +98,11 @@ else if($submit=="Login")
 
     # Form data string
     $postString = http_build_query($data, '', '&');
-    # Setting our options
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     $payload = json_encode($data);
+
+    # Setting our options
+    curl_setopt($ch, CURLOPT_POST, 1);
 
     // Attach encoded JSON string to the POST fields
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -114,19 +113,22 @@ else if($submit=="Login")
     // Return response instead of outputting
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    //print($url);
-
     // Execute the POST request
-    $result = curl_exec($ch);  // returns STRING, not BOOLEAN
+    $result = json_decode(curl_exec($ch));  // returns STRING, not BOOLEAN
 
-    if($result=="true")
+    //print($result);exit();
+
+    if($result!=NULL) // I got a session id! 
     {
         $_SESSION['username'] = $username;
-        header("Location: $self?submit=chatbot");
+        $_SESSION['sess'] = $result;
+        header("Location: $self?submit=chatbot&username=$username");
+        exit();
     }
-    else if($result=="false")
+    else
     {
         header("Location: $self?msg=error_login");
+        exit();
     }
 
 }
@@ -239,19 +241,19 @@ else if(($submit=="chatbot") or ($submit=="Send Command"))
             $command = substr($command, 0, strlen($command)-1);
         }
     
-        // add the username  :(
-        if(($command=="balance") or ($command=="transactions") or ($test_command=="withdraw") or ($test_command=="deposit") )
+        if(($command=="balance") or ($command=="transactions") or ($test_command=="withdraw") or ($test_command=="deposit") or ($test_command=="convert"))
         {
-            $username = $_SESSION['username'];  // :/
-            $command=$command."/$username";
+            $username = $_SESSION['username'];  
+            $sess = $_SESSION['sess'];            
+            $command=$command."/$username/$sess";
         }
    
         // API URL
         $url = "$url/$command";
-
+        
         // Create a new cURL resource
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // debugs output to screen when disabled! 
         $result_command = curl_exec($ch);
         $result_command = json_decode($result_command, true);
         curl_close($ch);
@@ -266,7 +268,7 @@ else if(($submit=="chatbot") or ($submit=="Send Command"))
     <tr> <td> <input style='width:200px' type='text' name='command'/> </td> </tr>
     <tr> <td> <input type='submit' name='submit' value='Send Command' /> </td> </tr>
     <tr> <td> <input type='submit' name='submit' value='Logout' /> </td> </tr>
-    <input type='hidden' name='chatbot' value='1' /> 
+    <input type='hidden' name='sess' value='$sess' /> 
     </form>
     </table>
     <br><br>
@@ -325,6 +327,6 @@ else if(($submit=="chatbot") or ($submit=="Send Command"))
 <?php
 }
 
-
+ob_flush();
 
 ?>
