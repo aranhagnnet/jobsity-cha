@@ -47,10 +47,61 @@ I also configured a virtual host for the server
 
 It's nothing out of the ordinary, but it's important to point out that DocumentRoot is supposed to point to this directory */var/www/html/public*
 
+Slim framework also requires you to create a .htaccess on your public folder
+
+````
+# Redirect to front controller
+RewriteEngine On
+# RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]
+````
+And also on the /var/www/html folder
+
+````
+RewriteEngine on
+RewriteRule ^$ public/ [L]
+RewriteRule (.*) public/$1 [L]
+````
+The idea behind those commands is that only the public folder is public on the webserver  :)
+
+## composer libraries
+
+You should run composer to install the following libraries
+
+````
+composer require slim/slim:"4.*"
+composer require slim/psr7
+composer require php-di/php-di
+composer require phpunit/phpunit --dev
+
+````
+
+I didn't add the libraries above to the repository... 
+
+
 ## api
 
 Clone the software from this repository to /var/www/html directory on your apache server.
 Point server-side/public as the root of your webserver folder (see step above again).
+
+The folder structure should look like this (https://odan.github.io/2019/11/05/slim4-tutorial.html#directory-structure)
+
+````
+/var/www/html
+.
+├── config/             Configuration files
+├── public/             Web server files (DocumentRoot)
+│   └── .htaccess       Apache redirect rules for the front controller
+│   └── index.php       The front controller
+├── templates/          Twig templates
+├── src/                PHP source code (The App namespace)
+├── tmp/                Temporary files (cache and logfiles)
+├── vendor/             Reserved for composer
+├── .htaccess           Internal redirect to the public/ directory
+└── composer.json       Project dependencies and autoloader
+````
 
 Take a look into the config/settings.php for configuration of your database, in this section
 
