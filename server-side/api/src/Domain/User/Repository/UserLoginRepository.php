@@ -73,4 +73,22 @@ class UserLoginRepository
         $stmt=$this->connection->prepare($sql);
         $stmt->execute([$session_id, $expires, $username]);
      }
+
+
+    /**
+     * Delete session_id for logged user
+     *
+     * @param array $data The username 
+     *
+     * @return void
+     */
+     public function deleteUserSession(array $data): void
+     {
+        $username = $data['username'];
+
+        $sql = "update users set session_id=?, session_id_expires=? where username=? ";
+
+        $stmt=$this->connection->prepare($sql);
+        $stmt->execute([0, 0, $username]);
+     }
 }
