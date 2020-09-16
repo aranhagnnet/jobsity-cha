@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 16, 2020 at 01:44 AM
+-- Generation Time: Sep 16, 2020 at 10:23 PM
 -- Server version: 5.7.31-0ubuntu0.18.04.1
 -- PHP Version: 7.4.9
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `jobsity`
 --
-CREATE DATABASE IF NOT EXISTS `jobsity` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `jobsity`;
 
 -- --------------------------------------------------------
 
@@ -55,7 +53,9 @@ CREATE TABLE `users` (
   `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `default_currency` char(3) COLLATE utf8mb4_unicode_ci NOT NULL
+  `default_currency` char(3) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `session_id` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `session_id_expires` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
