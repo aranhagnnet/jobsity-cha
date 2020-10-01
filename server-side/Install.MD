@@ -74,6 +74,14 @@ a2enmod rewrite
 
 ## composer libraries
 
+Installing composer
+
+````
+sudo apt-get install curl
+sudo curl -s https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+````
+
 You should run composer to install the following libraries
 
 ````
