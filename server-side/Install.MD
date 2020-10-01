@@ -66,6 +66,12 @@ RewriteRule (.*) public/$1 [L]
 ````
 The idea behind those commands is that only the public folder is public on the webserver  :)
 
+Don't forget to enable rewite module
+
+````
+a2enmod rewrite
+````
+
 ## composer libraries
 
 You should run composer to install the following libraries
