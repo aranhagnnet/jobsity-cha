@@ -54,8 +54,8 @@ CREATE TABLE `users` (
   `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
   `default_currency` char(3) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `session_id` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `session_id_expires` int(11) NOT NULL
+  `session_id` varchar(40) COLLATE utf8mb4_unicode_ci,
+  `session_id_expires` int(11) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
